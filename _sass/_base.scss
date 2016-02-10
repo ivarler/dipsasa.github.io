@@ -216,4 +216,29 @@ pre {
     }    
 }
 
+.brand-logo {
+    > span > svg {
+        display: inline-block;
+        width: 14px;
+        height: 20px;
+        vertical-align: middle;
+        margin-left: -1px;
+        margin-right: 1px;
+        
+        > g > path {
+            fill: $dips-red-color !important;
+            
+                
+        }
+    }
+    
+    &:visited > span > svg > g > path{
+        fill: darken($dips-red-color, 5%) !important;
+    }
+
+    &:hover > span > svg > g > path{
+        fill: $dips-red-color-light !important;
+    }    
+}
+
 
