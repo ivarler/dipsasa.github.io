@@ -16,6 +16,9 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://localhost:4000/" # the base hostname & protocol for your site
 twitter_username: DIPSASA
 github_username: DIPSASA
+facebook_username: DIPS-ASA-100422586702214/?fref=ts
+linkedin_username: company/dips-asa
+karriere_url: https://www.dips.no/karriere
 
 # Build settings
 markdown: kramdown
