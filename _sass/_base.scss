@@ -16,7 +16,7 @@ dl, dd, ol, ul, figure {
 body {
     font: $base-font-weight #{$base-font-size}/#{$base-line-height} $base-font-family;
     color: $text-color;
-    background-color: $background-color;
+    background-color: $backgorund-color-darker;
     -webkit-text-size-adjust: 100%;
     -webkit-font-feature-settings: "kern" 1;
     -moz-font-feature-settings: "kern" 1;
@@ -45,9 +45,8 @@ ul, ol, dl, figure,
 img {
     max-width: 100%;
     vertical-align: middle;
+    padding: 20px 0px 20px 0px;
 }
-
-
 
 /**
  * Figures
@@ -85,22 +84,25 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: $base-font-weight;
 }
 
-
+hr{
+    margin: 40px 0px 30px 0px;
+    border: 0;
+    border-top: 1px solid #eaeaea;
+}
 
 /**
  * Links
  */
 a {
-    color: $brand-color;
+    color: $dips-red-color;
     text-decoration: none;
 
     &:visited {
-        color: darken($brand-color, 15%);
+        color: darken($dips-red-color, 5%);
     }
 
     &:hover {
-        color: $text-color;
-        text-decoration: underline;
+        color: $dips-red-color-light;
     }
 }
 
@@ -204,3 +206,14 @@ pre {
         }
     }
 }
+
+.brand-icon {
+    > svg {
+        display: inline-block;
+        width: 118px;
+        height: 32px;
+        vertical-align: middle;
+    }    
+}
+
+

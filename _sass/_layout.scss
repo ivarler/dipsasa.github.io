@@ -2,7 +2,7 @@
  * Site header
  */
 .site-header {
-    border-top: 5px solid $grey-color-dark;
+    border-top: 5px solid $dips-red-color;
     border-bottom: 1px solid $grey-color-light;
     min-height: 56px;
 
@@ -10,18 +10,33 @@
     position: relative;
 }
 
+.site-header-ext{
+    background-color: $dips-red-color;
+    width:100%;
+    position:fixed;
+    top:0px;
+}
+
 .site-title {
-    font-size: 26px;
+    font-size: 33px;
     font-weight: 300;
-    line-height: 56px;
+    line-height: 52px;
     letter-spacing: -1px;
     margin-bottom: 0;
+    margin-left: -12px;
     float: left;
 
     &,
     &:visited {
         color: $grey-color-dark;
     }
+}
+
+.site-title-tech{
+    font-size:30px;
+    letter-spacing:3px;
+    font-weight:300;
+    color:#FBFBFB !important;
 }
 
 .site-nav {
@@ -33,12 +48,19 @@
     }
 
     .page-link {
-        color: $text-color;
+        color: $header-text-color;
         line-height: $base-line-height;
-
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        
         // Gaps between nav items, but not on the last one
         &:not(:last-child) {
             margin-right: 20px;
+        }
+        
+        &:hover{
+            color: darken($header-text-color, 15%);
+            text-decoration: none;
         }
     }
 
@@ -83,10 +105,12 @@
         .page-link {
             display: block;
             padding: 5px 10px;
+            text-transform: uppercase;
 
             &:not(:last-child) {
                 margin-right: 0;
             }
+            
             margin-left: 20px;
         }
     }
@@ -169,31 +193,56 @@
  */
 .page-content {
     padding: $spacing-unit 0;
+    margin-top:56px;
 }
 
 .page-heading {
     font-size: 20px;
 }
 
+.post-heading {
+    margin-bottom: 0px !important;
+}
+
+.post-img{
+    padding: 0px 0px 20px 0px;
+}
+
 .post-list {
     margin-left: 0;
     list-style: none;
-
-    > li {
-        margin-bottom: $spacing-unit;
-    }
 }
 
 .post-meta {
     font-size: $small-font-size;
     color: $grey-color;
+    margin-bottom: 10px;
+    display: block;
 }
 
 .post-link {
     display: block;
-    font-size: 24px;
+    font-size: 40px;
+    color:$post-link-color !important;
+    
+    &:hover {
+        color: $post-link-color;
+        text-decoration: none !important;
+    }
 }
 
+@include media-query($on-palm) {
+    .post-link {
+        display: block;
+        font-size: 24px;
+        color:$post-link-color;
+     
+        &:hover {
+            color: $post-link-color;
+            text-decoration: none;
+        }
+    }
+}
 
 
 /**
