@@ -1,10 +1,8 @@
 ---
 layout: post
 title:  "How to create a new post!"
-date:   2016-02-09 12:21:09 +0100
 categories: basics
-author: Ivar G.Lervold
-authorlink: http://vg.no
+author: igl
 img: http://jekyllrb.com/img/logo-2x.png
 ---
 
