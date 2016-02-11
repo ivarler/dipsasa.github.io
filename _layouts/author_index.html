@@ -10,7 +10,7 @@ footer: false
     {% elsif file_exists {{ "img/authors/" + {{ page.author }} + ".png" }} %}
         {% assign author_photo = page.author | append: ".png" | prepend: "/img/authors/" | prepend: site.baseurl %}
     {% else %}
-        {% assign author_photo = page.author | append: ".png" | prepend: "/img/authors/" | prepend: site.baseurl %}
+        {% assign author_photo = "/img/defaultauthor.png" | prepend: site.baseurl %}
     {% endif %}
     
     <div class="author_img_container">
