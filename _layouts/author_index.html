@@ -5,14 +5,20 @@ footer: false
 
 <div id="blog-archives" class="author">
     {% assign author = site.data.authors[page.author] %}
-    {{ author.name }}
     {% if author.img %}
-        <img src="{{ author.img }}"/>
+    <div class="author_img_container">
+        <img class="author_img" src="{{ author.img }}"/>
+    </div>
     {% else %}
-        <img src="{{ site.baseurl }}/img/authors/{{ page.author }}.png"/>
+    <div class="author_img_container">
+        <img class="author_img" src="{{ site.baseurl }}/img/authors/{{ page.author }}.png"/>
+    </div>
     {% endif %}
+    <h2 class="author_name">{{ author.name }}</h2>
     
-    {{ author.description }}
+    <p class="author_description">{{ author.description }}</p>
+    
+    <hr/>
     
     <ul class="post-list">
         {% for post in site.posts %}
