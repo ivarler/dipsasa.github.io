@@ -68,8 +68,7 @@
         position: absolute;
         top: 9px;
         right: $spacing-unit / 2;
-        background-color: $background-color;
-        border: 1px solid $grey-color-light;
+        background-color: darken($dips-red-color, 5%);
         border-radius: 5px;
         text-align: right;
 
@@ -87,7 +86,7 @@
                 height: 15px;
 
                 path {
-                    fill: $grey-color-dark;
+                    fill: $background-color;
                 }
             }
         }
@@ -203,6 +202,18 @@
         float: none;
         width: -webkit-calc(100% - (#{$spacing-unit} / 2));
         width:         calc(100% - (#{$spacing-unit} / 2));
+    }
+    
+    .footer_li {
+    display: inline;
+    margin: 0 10px;
+        > a {
+            vertical-align: middle;
+        }     
+    }
+
+    .footer_fa {
+        font-size: 20px !important;
     }
 }
 

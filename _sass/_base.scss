@@ -242,4 +242,16 @@ pre {
     }    
 }
 
+@include media-query($on-palm) {
+    .brand-logo {
+        > span > svg {
+            width: 15px;
+            height: 18px;
+            margin-bottom: 2px;
+        }
+    
+    }
+
+}
+
 
