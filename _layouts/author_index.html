@@ -6,14 +6,16 @@ footer: false
 <div id="blog-archives" class="author">
     {% assign author = site.data.authors[page.author] %}
     {% if author.img %}
-    <div class="author_img_container">
-        <img class="author_img" src="{{ author.img }}"/>
-    </div>
+        {% assign author_photo = author.img %}
+    {% elsif file_exists {{ "img/authors/" + {{ page.author }} + ".png" }} %}
+        {% assign author_photo = page.author | append: ".png" | prepend: "/img/authors/" | prepend: site.baseurl %}
     {% else %}
-    <div class="author_img_container">
-        <img class="author_img" src="{{ site.baseurl }}/img/authors/{{ page.author }}.png"/>
-    </div>
+        {% assign author_photo = "/img/defaultauthor.png" | prepend: site.baseurl %}
     {% endif %}
+    
+    <div class="author_img_container">
+        <img class="author_img" src="{{ author_photo }}"/>
+    </div>
     <h2 class="author_name">{{ author.name }}</h2>
     
     <p class="author_description">{{ author.description }}</p>
