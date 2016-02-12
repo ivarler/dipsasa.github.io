@@ -25,7 +25,13 @@ body {
     font-kerning: normal;
 }
 
-
+iframe {
+    margin: 0 auto;
+    width: 100%;
+    @include media-query($on-palm){
+        height: auto;
+    }
+}
 
 /**
  * Set `margin-bottom` to maintain vertical rhythm
@@ -169,6 +175,32 @@ pre {
     @include media-query($on-laptop) {
         max-width: -webkit-calc(#{$content-width} - (#{$spacing-unit}));
         max-width:         calc(#{$content-width} - (#{$spacing-unit}));
+        padding-right: $spacing-unit;
+        padding-left: $spacing-unit;
+    }
+    
+    @include media-query($on-palm) {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
+
+.padd {
+    padding: 0;
+    
+    @include media-query($on-palm){
+        padding-right: $spacing-unit / 2;
+        padding-left: $spacing-unit / 2;
+    }
+}
+
+.header-padd {
+    @include media-query($on-laptop){
+        padding-right: $spacing-unit / 2;
+        padding-left: $spacing-unit / 2;
+    }
+    
+    @include media-query($on-palm){
         padding-right: $spacing-unit / 2;
         padding-left: $spacing-unit / 2;
     }
@@ -240,6 +272,18 @@ pre {
     &:hover > span > svg > g > path{
         fill: $dips-red-color-light !important;
     }    
+}
+
+@include media-query($on-palm) {
+    .brand-logo {
+        > span > svg {
+            width: 15px;
+            height: 18px;
+            margin-bottom: 2px;
+        }
+    
+    }
+
 }
 
 

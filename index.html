@@ -7,11 +7,11 @@ layout: default
   <ul class="post-list">
     {% for post in site.posts %}
       <li>
-        <h2 class="post-heading">
+        <h2 class="post-heading padd">
           <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
         </h2>
         
-        <span class="post-meta">
+        <span class="post-meta padd">
           {{ post.date | date: "%b %-d, %Y" }} 
           <a href="{{ site.baseurl }}/authors/{{ post.author }}" itemprop="name">
                 {{ site.data.authors[post.author].name }}
@@ -22,7 +22,9 @@ layout: default
         <img class="post-img" src="{{post.img}}"></img>
         {% endif %}
 
+        <div class="padd">
         {{ post.excerpt }}
+        </div>
         <hr/>
       </li>
     {% endfor %}
