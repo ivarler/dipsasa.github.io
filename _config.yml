@@ -20,5 +20,7 @@ facebook_username: DIPS-ASA-100422586702214/?fref=ts
 linkedin_username: company/dips-asa
 karriere_url: https://www.dips.no/karriere
 
+excerpt_separator: "<!--more-->"
+
 # Build settings
 markdown: kramdown
