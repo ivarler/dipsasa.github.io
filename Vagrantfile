@@ -14,7 +14,8 @@ Vagrant::Config.run do |config|
   config.vm.provision :shell, :inline => "sudo apt-get install ruby2.3 -y"
   config.vm.provision :shell, :inline => "sudo apt-get install ruby-dev -y"
   config.vm.provision :shell, :inline => "sudo apt-get install ruby2.3-dev -y"
-  config.vm.provision :shell, :inline => "sudo gem install jekyll"
+  config.vm.provision :shell, :inline => "sudo apt-get install zlib1g-dev -y"
+  config.vm.provision :shell, :inline => "sudo gem install github-pages"
   config.vm.provision :shell, :inline => "sudo apt-get install git -y"
 
   config.vm.provision :shell, :inline => "echo All done, go vagrant ssh!"
