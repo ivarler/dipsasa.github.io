@@ -4,20 +4,28 @@ layout: default
 
 <div class="home">
 
-  <h1 class="page-heading">Posts</h1>
-
   <ul class="post-list">
     {% for post in site.posts %}
       <li>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
-
-        <h2>
+        <h2 class="post-heading">
           <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
         </h2>
+        
+        <span class="post-meta">
+          {{ post.date | date: "%b %-d, %Y" }} 
+          <a href="{{ site.baseurl }}/authors/{{ post.author }}" itemprop="name">
+                {{ site.data.authors[post.author].name }}
+            </a>
+        </span>
+        
+        {% if post.img %}
+        <img class="post-img" src="{{post.img}}"></img>
+        {% endif %}
+
+        {{ post.excerpt }}
+        <hr/>
       </li>
     {% endfor %}
   </ul>
-
-  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
 
 </div>
