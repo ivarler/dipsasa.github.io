@@ -266,6 +266,7 @@
     .post-link {
         display: block;
         font-size: 24px;
+        font-weight: 600;
         color:$post-link-color;
      
         &:hover {
@@ -317,6 +318,19 @@
 
         @include media-query($on-laptop) {
             font-size: 18px;
+        }
+    }
+    
+    p {
+        @include media-query($on-palm){
+            padding-left: $spacing-unit / 2;
+            padding-right: $spacing-unit / 2;
+            
+            > img {
+                max-width: 100vw;
+                margin-left: - $spacing-unit / 2 !important;
+                margin-right: - $spacing-unit / 2 !important;
+            } 
         }
     }
 }
