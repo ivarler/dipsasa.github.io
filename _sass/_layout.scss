@@ -334,6 +334,11 @@
     }
 }
 
+.post-tags {
+    margin-right: 7px;
+    font-size: $smallest-font-size;
+}
+
 /**
  * Imgs
  */
@@ -374,4 +379,8 @@
  
  .author_description{
      text-align: center;
+ }
+ 
+ .year-header {
+     color: lighten($text-color, 50%);
  }
