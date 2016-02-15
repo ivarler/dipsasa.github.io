@@ -24,3 +24,7 @@ excerpt_separator: "<!--more-->"
 
 # Build settings
 markdown: kramdown
+
+# Tagging
+tag_page_layout: tag_page
+tag_page_dir: tag
