@@ -23,11 +23,11 @@ layout: default
         <img class="post-img" src="{{post.img}}"></img>
         {% endif %}
 
-        <span class="padd">
-        {{ post.excerpt }}
-        </span>
+        <div class="post-excerpt padd">
+            {{ post.excerpt }}
+            <a href="{{ post.url | prepend: site.baseurl }}">[...]</a>
+        </div>
         
-        <a href="{{ post.url | prepend: site.baseurl }}">[...]</a>
         
         <div class="padd post-tags">
             {% for tag in post.tags %}

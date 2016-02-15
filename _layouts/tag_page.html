@@ -22,11 +22,13 @@ layout: default
                 
             </span>
             
-            <div class="padd">
+            <div class="post-excerpt padd">
                 {{ post.excerpt }}
+                <a href="{{ post.url | prepend: site.baseurl }}">[...]</a>
             </div>
             
-            <div class="padd">
+            
+            <div class="padd post-tags">
             {% for tag in post.tags %}
                 <a class="post-tag" href="{{ site.baseurl }}/tag/{{ tag }}" itemprop="name">
                     #{{ tag }}

@@ -241,10 +241,10 @@
 .post-list {
     margin-left: 0;
     list-style: none;
-    
-    > li > span > p:last-child {
-        display: inline;
-    }
+}
+
+.post-excerpt > p:last-of-type {
+    display: inline !important;
 }
 
 .post-meta {
