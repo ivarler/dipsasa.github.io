@@ -241,6 +241,10 @@
 .post-list {
     margin-left: 0;
     list-style: none;
+    
+    > li > span > p:last-child {
+        display: inline;
+    }
 }
 
 .post-meta {
@@ -334,9 +338,13 @@
     }
 }
 
-.post-tags {
+.post-tag{
     margin-right: 7px;
     font-size: $smallest-font-size;
+}
+
+.post-tags {
+    padding-top: 10px;
 }
 
 /**
@@ -384,3 +392,4 @@
  .year-header {
      color: lighten($text-color, 50%);
  }
+ 
