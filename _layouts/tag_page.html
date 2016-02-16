@@ -7,7 +7,7 @@ layout: default
         {% capture this_year %}{{ post.date | date: "%Y" }}{% endcapture %}
         {% unless year == this_year %}
             {% assign year = this_year %}
-            <h2 class="padd year-header">Artikler fra {{ year }}</h2>
+            <h2 class="padd post-year-header">Artikler fra {{ year }}</h2>
         {% endunless %}
         <li>
             <h2 class="post-heading padd">

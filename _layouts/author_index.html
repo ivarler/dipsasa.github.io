@@ -16,7 +16,12 @@ footer: false
     <div class="author_img_container padd">
         <img class="author_img" src="{{ author_photo }}"/>
     </div>
-    <h2 class="author_name padd">{{ author.name }}</h2>
+    
+    <div class="author_name_location_container">
+        <h2 class="author_name padd">{{ author.name }}</h2>
+    
+        <div class="author_location"><i class="fa fa-globe"></i> {{author.location}}</div>
+    </div>
     
     <p class="author_description padd">{{ author.description }}</p>
     
@@ -29,13 +34,17 @@ footer: false
             {% capture this_year %}{{ post.date | date: "%Y" }}{% endcapture %}
             {% unless year == this_year %}
                 {% assign year = this_year %}
-                <h2 class="padd year-header">Artikler fra {{ year }}</h2>
+                <h2 class="padd post-year-header">Artikler fra {{ year }}</h2>
             {% endunless %}
 
             <li>
                 <h2 class="post-heading padd">
                     <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
                 </h2>
+                
+                <span class="post-meta padd">
+                    {{ post.date | date: "%b %-d, %Y" }} 
+                </span>
                 
                 <div class="post-excerpt padd">
                     {{ post.excerpt }}
