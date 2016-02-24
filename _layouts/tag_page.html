@@ -30,7 +30,7 @@ layout: default
             
             <div class="padd post-tags">
             {% for tag in post.tags %}
-                <a class="post-tag" href="{{ site.baseurl }}/tag/{{ tag }}" itemprop="name">
+                <a class="post-tag" href="{{ site.baseurl }}/tag/{{ tag | downcase }}" itemprop="name">
                     #{{ tag }}
                 </a>
             {% endfor %}
