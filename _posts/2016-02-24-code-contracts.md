@@ -9,7 +9,9 @@ I DIPS har vi en stund hatt litt diskusjon rundt ulike former for enhetstesting.
 
 <!--more-->
 
-Ifm. denne diskusjonen har jeg eksperimentert litt med innføring av Code Contracts i [Kjernejournal](https://helsenorge.no/kjernejournal)-integrasjonen for DIPS Arena. Målet med dette var å finne ut hva Code Contracts kan bidra med i vår kode, og hva som eventuelt er kostnaden ved å innføre dette. Jeg har tidligere aldri brukt Code Contracts, og har generelt lite erfaring med statisk sjekking av kode utover det ReSharper tilbyr, så dette ble et nytt tankesett. Oppsummeringen som følger er en blanding av mine egne og andres erfaringer ved bruk av Code Contracts i .NET.
+Ifm. denne diskusjonen har jeg eksperimentert litt med innføring av Code Contracts i [Kjernejournal](https://helsenorge.no/kjernejournal)-integrasjonen for DIPS Arena. [DIPS Arena](https://www.dips.no) er navnet på den nye DIPS-klienten og [Kjernejournal](https://helsenorge.no/kjernejournal) er Helsedirektoratets løsning for å dele enkelte helseopplysninger mellom feks. fastlege og sykehus. 
+
+Målet med dette var å finne ut hva Code Contracts kan bidra med i vår kode, og hva som eventuelt er kostnaden ved å innføre dette. Jeg har tidligere aldri brukt Code Contracts, og har generelt lite erfaring med statisk sjekking av kode utover det ReSharper tilbyr, så dette ble et nytt tankesett. Oppsummeringen som følger er en blanding av mine egne og andres erfaringer ved bruk av Code Contracts i .NET.
 
 ## Litt om Code Contracts i .NET
 [Code Contracts](https://github.com/Microsoft/CodeContracts) er et verktøy for å innføre *conditions* i koden din som alltid må være sanne når de kjøres. Dette kan sjekkes både statisk og runtime. Kort fortalt bruker man *preconditions* for å verifisere input og state ved starten av en metode, *postconditions* for å verifsere output og state ved slutten av en metode, og *invariants* for å definere conditions som alltid skal gjelde for en gitt klasse. Det finnes flere gode kilder til informasjon om .NET Code Contracts, og det anbefales å bla gjennom disse før man går ordentlig i gang med Code Contracts:
@@ -53,11 +55,12 @@ Merk også følgende advarsel, som kan påvirke et eventuelt valg mellom **Usage
 
 Når man innfører Code Contracts i en eksisterende kodebase kan det være greit å bruke *legacy requires* i større grad enn det som vises i figuren over, fordi det kanskje allerede finnes en god del *if-then-throw* -kode.
 
-For Kjernejournal-integrasjonen i Arena valgte jeg å gå for **Usage 2**. Siden dette er "pilotprosjekt" for Code Contracts hos oss, ville jeg prøve å få til mest mulig validering. Kjernejournal-integrasjonen i Arena er ikke i produksjon enda, så det er foreløpig ikke noe problem å være avhengig av Code Contract tools for release-bygg. I tillegg er det ingen andre prosjekter som er avhengige av Kjernejournal-integrasjonen, så *public surface methods* er i praksis ikke-eksisterende.
+For Kjernejournal-integrasjonen i Arena valgte jeg å gå for **Usage 2**. Siden dette er "pilotprosjekt" for Code Contracts hos oss, ville jeg prøve å få til mest mulig validering. Kjernejournal-integrasjonen i Arena er ikke i produksjon ennå, så det er foreløpig ikke noe problem å være avhengig av Code Contract tools for release-bygg. I tillegg er det ingen andre prosjekter som er avhengige av Kjernejournal-integrasjonen, så *public surface methods* er i praksis ikke-eksisterende.
 
 Et par andre ting som er greit å vite om runtime checking:
 
 - Når runtime checking er skrudd på, gjør Code Contracts en *rewrite* av assemblyet. Fra manualen:
+
 > It applies the contract rewriter ccrewrite to the target assembly, performing well-formedness checks on
 the contracts, instrumenting contract runtime checks into the appropriate places, including contract
 inheritance
@@ -72,8 +75,8 @@ inheritance
 
 ## Static checking
 Først, en advarsel fra [Code Contracts User Manual]:
-> Static code checking or verification is a difficult endeavor. It requires a relatively large effort in terms of writing contracts, determining why a particular property cannot be proven, and finding a way to help the checker see the light. Before you start using the static contract checker in earnest, we suggest you spend enough time using contracts for runtime checking to familiarize yourself with contracts and the benefits they bring in that
-domain.
+
+> Static code checking or verification is a difficult endeavor. It requires a relatively large effort in terms of writing contracts, determining why a particular property cannot be proven, and finding a way to help the checker see the light. Before you start using the static contract checker in earnest, we suggest you spend enough time using contracts for runtime checking to familiarize yourself with contracts and the benefits they bring in that domain.
 
 Med static checking forsøker Code Contracts å analysere koden din for å finne ut om det er sannsynlig at en kontrakt vil holde under kjøring. Dette er ganske krevende, og baserer seg både på kontrakter andre steder i koden og antakelser om oppførsel i eksterne APIer. Merk at static checking har en del begrensninger, og analyzeren er ikke veldig smart. Mer om dette senere.
 
@@ -154,5 +157,5 @@ En relatert utfordring er at preconditions i public-metoder ikke kan referere pr
 
 [Code Contracts User Manual]: http://research.microsoft.com/en-us/projects/contracts/userdoc.pdf
 
-## Concluding remarks
-Selv om Code Contracts for .NET ikke er helt modent enda, og det til tider kan være veldig tungvint å få verifisert en kontrakt, er jeg positiv til å ta det i bruk, i hvert fall i noen grad. Kontraktene bidrar til et tankesett som kan skape bedre kode, og static checking hjelper til med å finne en del logiske feil eller mangler. Best av alt, så bidrar runtime checking til litt ryddigere enhetstester. Den store ulempen er nok at det krever mye tid å innføre dette i eksisterende prosjekter, og tid er ikke noe vi har for mye av.
+## Konklusjon
+Selv om Code Contracts for .NET ikke er helt modent ennå, og det til tider kan være veldig tungvint å få verifisert en kontrakt, er jeg positiv til å ta det i bruk, i hvert fall i noen grad. Kontraktene bidrar til et tankesett som kan skape bedre kode, og static checking hjelper til med å finne en del logiske feil eller mangler. Best av alt, så bidrar runtime checking til litt ryddigere enhetstester. Den store ulempen er nok at det krever mye tid å innføre dette i eksisterende prosjekter, men Code Contracts er nyttig verktøy å ha med seg i nye prosjekter.
