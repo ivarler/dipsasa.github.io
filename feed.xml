@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>DIPS | Tech</title>
+    <description>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</description>
+    <link>http://localhost:4000//</link>
+    <atom:link href="http://localhost:4000//feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Mon, 29 Feb 2016 09:03:13 +0100</pubDate>
+    <lastBuildDate>Mon, 29 Feb 2016 09:03:13 +0100</lastBuildDate>
+    <generator>Jekyll v3.1.1</generator>
+    
+      <item>
+        <title>Code Contracts i .NET</title>
+        <description>&lt;p&gt;I DIPS har vi en stund hatt litt diskusjon rundt ulike former for enhetstesting. Vi bruker enhetstesting i stor grad i våre prosjekter, men med varierende detaljnivå. Utfordringen her er at enhetstester som opererer på lave detaljnivåer er kostbare å vedlikeholde, selv om de kanskje gir god code coverage. Men hva med &lt;a href=&quot;https://coding.abel.nu/2014/07/code-coverage-functional-coverage/&quot;&gt;functional coverage&lt;/a&gt;? Kanskje får man dette med på kjøpet, kanskje ikke. Det kommer an på hvor flink man er til å skrive gode tester.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;Ifm. denne diskusjonen har jeg eksperimentert litt med innføring av Code Contracts i &lt;a href=&quot;https://helsenorge.no/kjernejournal&quot;&gt;Kjernejournal&lt;/a&gt;-integrasjonen for DIPS Arena. &lt;a href=&quot;https://www.dips.no&quot;&gt;DIPS Arena&lt;/a&gt; er navnet på den nye DIPS-klienten og &lt;a href=&quot;https://helsenorge.no/kjernejournal&quot;&gt;Kjernejournal&lt;/a&gt; er Helsedirektoratets løsning for å dele enkelte helseopplysninger mellom feks. fastlege og sykehus.&lt;/p&gt;
+
+&lt;p&gt;Målet med dette var å finne ut hva Code Contracts kan bidra med i vår kode, og hva som eventuelt er kostnaden ved å innføre dette. Jeg har tidligere aldri brukt Code Contracts, og har generelt lite erfaring med statisk sjekking av kode utover det ReSharper tilbyr, så dette ble et nytt tankesett. Oppsummeringen som følger er en blanding av mine egne og andres erfaringer ved bruk av Code Contracts i .NET.&lt;/p&gt;
+
+&lt;h2 id=&quot;litt-om-code-contracts-i-net&quot;&gt;Litt om Code Contracts i .NET&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/Microsoft/CodeContracts&quot;&gt;Code Contracts&lt;/a&gt; er et verktøy for å innføre &lt;em&gt;conditions&lt;/em&gt; i koden din som alltid må være sanne når de kjøres. Dette kan sjekkes både statisk og runtime. Kort fortalt bruker man &lt;em&gt;preconditions&lt;/em&gt; for å verifisere input og state ved starten av en metode, &lt;em&gt;postconditions&lt;/em&gt; for å verifsere output og state ved slutten av en metode, og &lt;em&gt;invariants&lt;/em&gt; for å definere conditions som alltid skal gjelde for en gitt klasse. Det finnes flere gode kilder til informasjon om .NET Code Contracts, og det anbefales å bla gjennom disse før man går ordentlig i gang med Code Contracts:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://msdn.microsoft.com/en-us/library/dd264808(v=vs.110).aspx&quot;&gt;Code Contracts på MSDN&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://research.microsoft.com/en-us/projects/contracts/userdoc.pdf&quot;&gt;Code Contracts User Manual&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://research.microsoft.com/en-US/projects/contracts/cccheck.pdf&quot;&gt;The CodeContracts static checker&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Å innføre Code Contracts i en eksisterende kodebase kan være en utfordring, spesielt for å få på plass god statisk analyse, og da er det viktig at man bruker en &lt;a href=&quot;http://blog.xoc.net/2014/03/10-steps-for-implementing-code.html&quot;&gt;strukturert framgangsmåte&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Code Contracts tools kan installeres som &lt;a href=&quot;https://www.nuget.org/packages/DotNet.Contracts/&quot;&gt;NuGet-pakke&lt;/a&gt; eller som &lt;a href=&quot;https://visualstudiogallery.msdn.microsoft.com/1ec7db13-3363-46c9-851f-1ce455f66970&quot;&gt;Visual Studio extension&lt;/a&gt;. Sistnevnte ser av en eller annen grunn ikke ut til å være oppdatert med nyeste versjon per i dag.&lt;/p&gt;
+
+&lt;p&gt;Ute i den store verden finnes det litt ulike syn på nytten av Code Contracts i .NET, og mye bærer preg av at .NET Code Contracts ikke er helt modent enda. Noen eksempler, som taler både for og imot bruk av .NET Code Contracts:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://jarrettmeyer.com/blog/2013/12/30/learning-code-contracts&quot;&gt;Jarrett Meyer, Learning Code Contracts&lt;/a&gt;:&lt;/p&gt;
+
+    &lt;blockquote&gt;
+      &lt;p&gt;Code contracts are a debugging tool. They are not a replacement for unit tests. Good code contracts and good unit tests work together.&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://blogs.encodo.ch/news/view_article.php?id=170&quot;&gt;Microsoft Code Contracts: Not with a Ten-foot Pole&lt;/a&gt; (denne er fra 2009, men noe av det som tas opp er fortsatt gjeldende)&lt;/p&gt;
+
+    &lt;blockquote&gt;
+      &lt;p&gt;Without explicit language support, a DBC solution couched in terms of assertions and/or exceptions quickly leads to clutter that obscures the actual program logic.&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://codebetter.com/patricksmacchia/2013/12/18/code-contracts-is-the-next-coding-practice-you-should-learn-and-use/&quot;&gt;Code Contracts is the next coding practice you should learn and use&lt;/a&gt;&lt;/p&gt;
+
+    &lt;blockquote&gt;
+      &lt;p&gt;By using contracts you make unit-tests much more effective.&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://discoveringcode.blogspot.no/2014/03/code-contracts-and-test-driven.html&quot;&gt;Code Contracts and Test-Driven Development&lt;/a&gt;&lt;/p&gt;
+
+    &lt;blockquote&gt;
+      &lt;p&gt;The great thing about Code Contracts is that you don’t need to redefine them on all of your sub-types.&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;runtime-checking&quot;&gt;Runtime checking&lt;/h2&gt;
+&lt;p&gt;Når man først starter med Code Contracts, anbefales det å begynne med runtime checking. Det er flere måter å gjøre runtime checking på, og &lt;a href=&quot;http://research.microsoft.com/en-us/projects/contracts/userdoc.pdf&quot;&gt;Code Contracts User Manual&lt;/a&gt; gir følgende hjelp til å beslutte hva som passer for et gitt prosjekt:&lt;/p&gt;
+
+&lt;p&gt;&lt;img usage_guidelines.png=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Når man gjør denne vurderingen er det noen faktorer man må ta hensyn til. &lt;a href=&quot;http://www.codeproject.com/Articles/181411/Code-Contract-Performance-Analysis&quot;&gt;Runtime checking vil kunne påvirke ytelsen&lt;/a&gt;, men omfanget vil variere avhengig av hvilke kontrakter man implementerer. &lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt; checks og range-checks på f.eks. integers koster ganske lite, mens collection quantifiers gjerne koster litt mer. Hvis man ikke ønsker runtime checking i release, går man for &lt;strong&gt;Usage 1&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Merk også følgende advarsel, som kan påvirke et eventuelt valg mellom &lt;strong&gt;Usage 2&lt;/strong&gt; og &lt;strong&gt;Usage 3&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;The risk of using the contract tools in your release build is that you depend on tools that have not reached production quality level.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Når man innfører Code Contracts i en eksisterende kodebase kan det være greit å bruke &lt;em&gt;legacy requires&lt;/em&gt; i større grad enn det som vises i figuren over, fordi det kanskje allerede finnes en god del &lt;em&gt;if-then-throw&lt;/em&gt; -kode.&lt;/p&gt;
+
+&lt;p&gt;For Kjernejournal-integrasjonen i Arena valgte jeg å gå for &lt;strong&gt;Usage 2&lt;/strong&gt;. Siden dette er “pilotprosjekt” for Code Contracts hos oss, ville jeg prøve å få til mest mulig validering. Kjernejournal-integrasjonen i Arena er ikke i produksjon ennå, så det er foreløpig ikke noe problem å være avhengig av Code Contract tools for release-bygg. I tillegg er det ingen andre prosjekter som er avhengige av Kjernejournal-integrasjonen, så &lt;em&gt;public surface methods&lt;/em&gt; er i praksis ikke-eksisterende.&lt;/p&gt;
+
+&lt;p&gt;Et par andre ting som er greit å vite om runtime checking:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Når runtime checking er skrudd på, gjør Code Contracts en &lt;em&gt;rewrite&lt;/em&gt; av assemblyet. Fra manualen:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;It applies the contract rewriter ccrewrite to the target assembly, performing well-formedness checks on
+the contracts, instrumenting contract runtime checks into the appropriate places, including contract
+inheritance&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;De fleste kontraktmetodene er i utgangspunktet &lt;em&gt;conditionally compiled&lt;/em&gt;, definert av CONTRACTS_FULL. I Visual Studio er det mulig å styre dette fra project properties i stedet for å definere CONTRACTS_FULL overalt.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;hvilke-fordeler-gir-det-oss--bruke-runtime-checking&quot;&gt;Hvilke fordeler gir det oss å bruke runtime checking?&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Bedre enhetstester:&lt;/strong&gt; Med Code Contracts kan man definere en del forventa oppførsel direkte i koden, i stedet for å skrive haugevis av tester som f.eks. verifiserer riktig oppførsel gitt ugyldige parametre. Typiske kandidater her er &lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt; eller range-checks. I stedet kan man fokusere på mer funksjonelle enhetstester, fordi kontraktene kjøres uansett. Dersom en kontrakt feiler, kastes en &lt;code class=&quot;highlighter-rouge&quot;&gt;ContractException&lt;/code&gt;, og testen feiler (selv om testen i utgangspunktet er ment for å teste noe annet).&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Enklere å identifisere feil under testing:&lt;/strong&gt; Når det oppstår feil, er det ikke alltid like enkelt å finne ut hvor denne oppstår (spesielt ikke med omfattende bruk av async/await). Med Code Contracts er det enklere å identifisere når tilstanden i en gitt klasse eller parametre inn i en metode ikke er som forventa (før det eventuelt feiler et annet sted), og gi tydelig tilbakemelding om dette.&lt;/p&gt;
+
+&lt;h2 id=&quot;static-checking&quot;&gt;Static checking&lt;/h2&gt;
+&lt;p&gt;Først, en advarsel fra &lt;a href=&quot;http://research.microsoft.com/en-us/projects/contracts/userdoc.pdf&quot;&gt;Code Contracts User Manual&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Static code checking or verification is a difficult endeavor. It requires a relatively large effort in terms of writing contracts, determining why a particular property cannot be proven, and finding a way to help the checker see the light. Before you start using the static contract checker in earnest, we suggest you spend enough time using contracts for runtime checking to familiarize yourself with contracts and the benefits they bring in that domain.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Med static checking forsøker Code Contracts å analysere koden din for å finne ut om det er sannsynlig at en kontrakt vil holde under kjøring. Dette er ganske krevende, og baserer seg både på kontrakter andre steder i koden og antakelser om oppførsel i eksterne APIer. Merk at static checking har en del begrensninger, og analyzeren er ikke veldig smart. Mer om dette senere.&lt;/p&gt;
+
+&lt;p&gt;I Visual Studio er det mange forskjellige options for static checking man kan skru på. Man kan for eksempel få analyzeren til å sjekke spesifikke ting, automatisk gjøre en del antakelse, eller foreslå contract definitions. I tillegg kan man velge hvilket nivå av warnings som skal vises, og om bygget skal feile dersom analyzeren gir warnings (merk at i gjeldende versjon feiler denne også på warnings som ikke er relatert til Code Contracts). Her er det lurt å starte på et lavt nivå av warnings, og jobbe seg oppover etter hvert som man får kontraktene til å fungere. På høyere nivåer vil analyzeren prøve å verifisere mer og mer av koden for å sjekke at kontraktene holder, og det blir etter hvert ganske vanskelig å “bevise” for den at det stemmer.&lt;/p&gt;
+
+&lt;h3 id=&quot;hvilke-fordeler-gir-det-oss--bruke-static-checking&quot;&gt;Hvilke fordeler gir det oss å bruke static checking?&lt;/h3&gt;
+&lt;p&gt;Static checking hjelper oss i hovedsak med å oppdage feil i programflyten basert på de kontraktene vi har satt opp, compile-time.&lt;/p&gt;
+
+&lt;p&gt;Da jeg skulle innføre Code Contracts i Kjernejournal-integrasjonen endte jeg opp med å skrive om en del kode for å få det til å fungere bedre med Code Contracts, og for å hjelpe analyzeren med å verifisere resultatet. For eksempel oppdaget jeg et par tilfeller der jeg hadde unødvendig state i en klasse, og fjernet dermed denne. Stort sett vil jeg påstå at koden ble &lt;em&gt;bedre&lt;/em&gt; av dette, og at det å innføre/bruke Code Contracts gir en effekt tilsvarende TDD når det gjelder kodekvalitet.&lt;/p&gt;
+
+&lt;h3 id=&quot;hvilke-problemerulemper-kan-static-checking-fre-til&quot;&gt;Hvilke problemer/ulemper kan static checking føre til?&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Tid:&lt;/strong&gt; Static checking er en ganske krevende operasjon, og avhengig av størrelsen på prosjektet kan det ta ganske lang tid. I Visual Studio kan dette kjøre i bakgrunnen, men når man kjører bygg f.eks. på byggeserver skjer dette synkront. I Kjernejournal-integrasjonen økte byggetiden fra 25s til 35s (inkludert kjøring av enhetstester, NuGet restore, og lignende). 10 sekunder er ikke mye, men Kjernejournal-integrasjonen er ganske liten, og det tilsvarer en økning på 40%.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Contracts er vanskelige å bevise / jeg får for mange warnings&lt;/strong&gt;: Sånn er det bare. Sett warning-nivået til det du mener er fornuftig for ditt prosjekt. I Kjernejournal-integrasjonen endte jeg opp med nivå 3 &lt;em&gt;(more warnings)&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;At contracts er vanskelige å bevise skyldes i noen grad at Code Contracts for .NET ikke er helt modent enda. Jeg opplevde for eksempel at analyzeren aksepterte følgende kode når det ble sendt inn gyldig verdi:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;n&quot;&gt;Contract&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Requires&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;byteArray&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;byteArray&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Length&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;… mens den ikke klarte å verifisere dette:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;n&quot;&gt;Contract&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Requires&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;ByteArrayIsValid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;byteArray&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+
+&lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ByteArrayIsValid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;byteArray&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;byteArray&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;byteArray&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Length&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Jeg har også hatt trøbbel med å verifisere kontrakter på følgende form:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;n&quot;&gt;Contract&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Requires&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;someCondition&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;someAdditionalCondition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;someCondition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Code Contracts sliter også med &lt;strong&gt;extension methods&lt;/strong&gt;. Gitt følgende kode:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Task&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ExtractAndDeserializeContentAsync&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HttpResponseMessage&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;httpResponseMessage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;… påsto analyzeren at den ikke kunne verifisere at &lt;code class=&quot;highlighter-rouge&quot;&gt;httpResponseMessage&lt;/code&gt; ikke var null.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;String.IsNullOrWhiteSpace()&lt;/code&gt;: Hvis du ser følgende warning:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;n&quot;&gt;Detected&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;call&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;IsNullOrWhiteSpace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&#39;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;without&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Pure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;contracts&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[...]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;… skjer dette pga en feil i Code Contracts for .NET 4.6.1. Se &lt;a href=&quot;https://stackoverflow.com/questions/34612382/how-to-deal-with-code-contracts-warning-cc1036-when-using-string-isnullorwhitesp/&quot;&gt;tilsvarende spørsmål på StackOverflow&lt;/a&gt; for mulige løsninger.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Andre problemer?&lt;/strong&gt; Sjekk &lt;a href=&quot;https://github.com/Microsoft/CodeContracts/issues&quot;&gt;åpne issues på GitHub&lt;/a&gt;, eller &lt;a href=&quot;https://stackoverflow.com/search?q=code+contracts&quot;&gt;spør StackOverflow&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;andre-tanker-og-kommentarer&quot;&gt;Andre tanker og kommentarer&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Invariants og readonly:&lt;/strong&gt; I project properties kan man velge et alternativ som heter &lt;em&gt;Infer invariants for readonly&lt;/em&gt;. Dette betyr at analyzeren antar at &lt;code class=&quot;highlighter-rouge&quot;&gt;readonly&lt;/code&gt;-felter alltid har samme verdi når den kjører static checking. Dette fungerte ikke som forventa i Kjernejournal-prosjektet, og jeg måtte eksplisitt definere &lt;code class=&quot;highlighter-rouge&quot;&gt;Contract.Invariant()&lt;/code&gt; for readonly-felter for å få det til å fungere. Dette fører til en del støy i koden.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Kontrakter på interfaces&lt;/strong&gt;: Hvis man ønsker kontrakter på metoder som defineres av interfaces, må disse plasseres i en egen abstrakt kontraktklasse, markert med attributtet &lt;code class=&quot;highlighter-rouge&quot;&gt;[ContractClassFor(...)]&lt;/code&gt;. Dette kan være både en fordel og en ulempe. Fordelen er at kontrakten defineres et annet sted, slik at koden blir mer ryddig. Ulempen er at kontrakten defineres et annet sted, slik at den blir mindre synlig. I klasser det man i tillegg vil ha kontrakter på private metoder (kan være relevant for store klasser med mye logikk) vil det bety at noen kontrakter er definert inline, mens andre er definert i kontraktklassen, og da kan det fort bli uoversiktlig.&lt;/p&gt;
+
+&lt;p&gt;Merk at når kontraktene er definert for et interface, betyr dette også at de gjelder for &lt;a href=&quot;https://en.wikipedia.org/wiki/Liskov_substitution_principle&quot;&gt;alle implementasjoner&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;En relatert utfordring er at preconditions i public-metoder ikke kan referere private felter, fordi dette ikke kan verifiseres av den som kaller metoden. Det betyr at hvis man ønsker å sjekke et privat felt som en del av en kontrakt, må denne eksponeres gjennom en public property.&lt;/p&gt;
+
+&lt;h2 id=&quot;noen-tips-til-slutt&quot;&gt;Noen tips til slutt&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Bruk &lt;a href=&quot;https://msdn.microsoft.com/en-us/library/system.diagnostics.contracts.pureattribute(v=vs.110).aspx&quot;&gt;[Pure]&lt;/a&gt;!&lt;/li&gt;
+  &lt;li&gt;Hvis samme kontrakt brukes flere steder, vurder &lt;a href=&quot;https://msdn.microsoft.com/en-us/library/system.diagnostics.contracts.contractabbreviatorattribute(v=vs.110).aspx&quot;&gt;[ContractAbbreviator]&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;Bruk &lt;code class=&quot;highlighter-rouge&quot;&gt;Contract.Ensures()&lt;/code&gt; for å definere hvilke returverdier som er gyldige. Dette er til stor hjelp for analyzeren ved static checking.&lt;/li&gt;
+  &lt;li&gt;Hvis det ikke finnes andre måter å verifisere en kontrakt på (f.eks. ved bruk av eksterne APIer), bruk &lt;code class=&quot;highlighter-rouge&quot;&gt;Contract.Assume()&lt;/code&gt; for å hjelpe analyzeren med å verifisere koden ved static checking.&lt;/li&gt;
+  &lt;li&gt;Ved innføring i eksisterende prosjekter, start på laveste nivå i koden din, med klasser og metoder som ikke har så mange avhengigheter, og jobb deg oppover etter hvert som kontraktene kan verifiseres.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;konklusjon&quot;&gt;Konklusjon&lt;/h2&gt;
+&lt;p&gt;Selv om Code Contracts for .NET ikke er helt modent ennå, og det til tider kan være veldig tungvint å få verifisert en kontrakt, er jeg positiv til å ta det i bruk, i hvert fall i noen grad. Kontraktene bidrar til et tankesett som kan skape bedre kode, og static checking hjelper til med å finne en del logiske feil eller mangler. Best av alt, så bidrar runtime checking til litt ryddigere enhetstester. Den store ulempen er nok at det krever mye tid å innføre dette i eksisterende prosjekter, men Code Contracts er nyttig verktøy å ha med seg i nye prosjekter.&lt;/p&gt;
+</description>
+        <pubDate>Wed, 24 Feb 2016 00:00:00 +0100</pubDate>
+        <link>http://localhost:4000//2016/02/24/code-contracts.html</link>
+        <guid isPermaLink="true">http://localhost:4000//2016/02/24/code-contracts.html</guid>
+        
+        <category>CSharp</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Serverside C# med Vagrant og Docker</title>
+        <description>&lt;p&gt;Et av de beste tilbudene man får som utvikler i Trondheim er &lt;a href=&quot;http://2015.trondheimdc.no/&quot;&gt;Trondheim Developer Conferene&lt;/a&gt;. I fjor gikk TDC av stabelen for fjerde året på rad. Jeg var så heldig å stå på lista over foredragsholdere, som inkluderte store internasjonale navn som &lt;a href=&quot;http://www.hanselman.com/&quot;&gt;Scott Hanselman&lt;/a&gt;, &lt;a href=&quot;http://blah.winsmarts.com/&quot;&gt;Sahil Malik&lt;/a&gt;, &lt;a href=&quot;http://seb.ly/&quot;&gt;Seb Lee-Delisle&lt;/a&gt; og &lt;a href=&quot;http://odetocode.com/about/scott-allen&quot;&gt;Scott Allen&lt;/a&gt;. Det var stort å få gjøre sin debut som foredragsholder på samme scene som disse dyktige folkene!&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;Foredraget jeg tok med meg var &lt;strong&gt;Enkel kryssplatform RESTFull tjeneste med .NET, Vagrant og Docker&lt;/strong&gt;, en gjennomgang av hvordan lage en kryssplatform serverkomponent i .NET med  &lt;a href=&quot;https://www.vagrantup.com/&quot;&gt;Vagrant&lt;/a&gt; og &lt;a href=&quot;https://www.docker.com/&quot;&gt;Docker&lt;/a&gt; som kjerneverktøy i utviklingsløpet. Denne verktøykassen legger opp til fokus på integrasjoner og produksjonslik deploy fra første linje kode skrevet. Dette er et tema &lt;a href=&quot;http://blog.amosti.net/build-test-and-deploy-net-apps-with-vagrant-and-docker/&quot;&gt;Jeg har skrevet litt om før.&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Essensen i foredraget er at .NET og C# nå er alt man trenger å kjenne til for å skrive hele stacken i applikasjonen din: Fra mobilklienter for iOS og Android via &lt;a href=&quot;https://xamarin.com/&quot;&gt;Xamarin&lt;/a&gt; til serversiden med &lt;a href=&quot;http://www.mono-project.com/&quot;&gt;Mono&lt;/a&gt; og &lt;a href=&quot;https://github.com/dotnet/coreclr/wiki&quot;&gt;CoreCLR&lt;/a&gt;, som gir deg fritt spillerom til å velge *nix eller Windows som kjøremiljø.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://i.imgur.com/bJeyynv.jpg&quot; alt=&quot;&quot; /&gt;
+Foto: Runar Ovesen Hjerpbakk&lt;/p&gt;
+
+&lt;p&gt;Tips til rammeverk og biblioteker man kan bruke for en enkel RESTFull tjeneste som skal kjøre kryssplatform er &lt;a href=&quot;http://nancyfx.org/&quot;&gt;NancyFX&lt;/a&gt;, &lt;a href=&quot;http://topshelf-project.com/&quot;&gt;Topshelf&lt;/a&gt; and &lt;a href=&quot;https://github.com/StackExchange/dapper-dot-net&quot;&gt;Dapper&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Slides og opptak fra foredraget ligger under. Ta gjerne en titt!&lt;/p&gt;
+
+&lt;script async=&quot;&quot; class=&quot;speakerdeck-embed&quot; data-id=&quot;3191aeafb0bf493b8be90abe01639bce&quot; data-ratio=&quot;1.77777777777778&quot; src=&quot;//speakerdeck.com/assets/embed.js&quot;&gt;&lt;/script&gt;
+
+&lt;iframe src=&quot;https://player.vimeo.com/video/144964559&quot; width=&quot;500&quot; height=&quot;281&quot; frameborder=&quot;0&quot; webkitallowfullscreen=&quot;&quot; mozallowfullscreen=&quot;&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;p&gt;&lt;a href=&quot;https://vimeo.com/144964559&quot;&gt;Andreas Mosti - ENKEL RESTFULL TJENESTE MED .NET, VAGRANT OG DOCKER&lt;/a&gt; from &lt;a href=&quot;https://vimeo.com/trondheimdc&quot;&gt;TrondheimDC&lt;/a&gt; on &lt;a href=&quot;https://vimeo.com&quot;&gt;Vimeo&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Etter foredraget tok jeg en tur backstage og ingen ringeren enn Scott Hanselman med demoen han skulle holde av &lt;a href=&quot;http://www.asp.net/vnext&quot;&gt;ASP.NET 5&lt;/a&gt; (nylig døpt om til &lt;a href=&quot;http://www.hanselman.com/blog/ASPNET5IsDeadIntroducingASPNETCore10AndNETCore10.aspx&quot;&gt;ASP.NET Core 1&lt;/a&gt;). Hanselman tok for seg framtiden slik Open Source Microsoft ser den for seg, å kjøre kode på alle platformer med minst mulig installert takket være &lt;a href=&quot;https://github.com/dotnet/coreclr&quot;&gt;CoreCLR&lt;/a&gt;. Scott fortalte at han planla å be en tilfeldig person blant publikum med en Mac for å demonstrere hvor enkelt det er å kjøre en ASP.NET 5 app uten noe som helst installert. Jeg plasserte da selvfølgelig Utviklingsleder i DIPS, &lt;a href=&quot;http://hjerpbakk.com/&quot;&gt;Runar Ovesen Hjerpbakk&lt;/a&gt; på første rad. Måtte han ta scenen sammen med Scott? Selvfølgelig!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://i.imgur.com/6Ba2BF7.jpg&quot; alt=&quot;&quot; /&gt;
+Foto: Andreas Mosti&lt;/p&gt;
+
+&lt;p&gt;Den vanskelige biten var ikke å få ASP.NET til å kjøre på OS X, men å få hodet rundt den norske tastaturlayouten. Hanselman vitset i kjent stil og hans 3 innlegg endte opp (ikke overraskende) med å være noen av de mest underholdende på hele konferansen.&lt;/p&gt;
+
+&lt;p&gt;Alle sesjoner fra TDC 2015 ligger ute på &lt;a href=&quot;https://vimeo.com/trondheimdc/videos&quot;&gt;Vimeo&lt;/a&gt;. TDC 2016 vil finne sted 31. oktober 2016, så bare hold av datoen og bestill flybilletter!&lt;/p&gt;
+</description>
+        <pubDate>Wed, 10 Feb 2016 00:00:00 +0100</pubDate>
+        <link>http://localhost:4000//2016/02/10/tdc.html</link>
+        <guid isPermaLink="true">http://localhost:4000//2016/02/10/tdc.html</guid>
+        
+        <category>TDC</category>
+        
+        <category>Vagrant</category>
+        
+        <category>Docker</category>
+        
+        <category>Devops</category>
+        
+        <category>CSharp</category>
+        
+        
+      </item>
+    
+  </channel>
+</rss>
