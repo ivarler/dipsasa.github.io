@@ -4,10 +4,6 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
+Velkommen [DIPS ASAs](http://dips.no) tech-blogg! DIPS ASA er Norges største leverandør av e-helse systemer og vi er et av Norges største programvarehus. 
 
-You can find the source code for the Jekyll new theme at:
-[jekyll-new](https://github.com/jglovier/jekyll-new)
-
-You can find the source code for Jekyll at
-[jekyll](https://github.com/jekyll/jekyll)
+På bloggen vil flere av våre 120 dyktige utviklere gi oss innblikk i noen av de tekniske problemstillingene vi står ovenfor på veien mot å lage verdens beste e-helse system.
