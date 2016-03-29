@@ -12,15 +12,39 @@ layout: default
         </h2>
         
         <span class="post-meta padd">
-          {{ post.date | date: "%b %-d, %Y" }} 
-          <a href="{{ site.baseurl }}/authors/{{ post.author }}" itemprop="name">
-                {{ site.data.authors[post.author].name }}
-            </a>
-            
+          {{ post.date | date: "%b %-d, %Y" }}
+            {% assign authorCount = post.author | size %}
+        
+            {% if authorCount == 1 %}
+                {% assign author = post.author | first %}
+                <a href="{{ site.baseurl }}/authors/{{ author }}" itemprop="name">
+                    {{ site.data.authors[author].name }}
+                </a>
+            {% else %}
+                {% for author in post.author %}
+                    {% if forloop.first %}
+                        <a href="{{ site.baseurl }}/authors/{{ author }}" itemprop="name">
+                            {{ site.data.authors[author].name }}
+                        </a>
+                    {% elsif forloop.last %}
+                        &#38; 
+                        <a href="{{ site.baseurl }}/authors/{{ author }}" itemprop="name">
+                            {{ site.data.authors[author].name }}
+                        </a>
+                    {% else %}
+                        ,
+                        <a href="{{ site.baseurl }}/authors/{{ author }}" itemprop="name">
+                            {{ site.data.authors[author].name }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         </span>
         
         {% if post.img %}
-        <img class="post-img" src="{{post.img}}"></img>
+        <div class="post-img-wrapper">
+            <img class="post-img" src="{{post.img}}"></img>
+        </div>
         {% endif %}
 
         <div class="post-excerpt padd">
