@@ -8,6 +8,12 @@ dl, dd, ol, ul, figure {
     padding: 0;
 }
 
+h2, h3, h4, h5, h6 {
+    @include media-query($on-palm){
+        padding-right: $spacing-unit / 2;
+        padding-left: $spacing-unit / 2;
+    }
+} 
 
 
 /**
