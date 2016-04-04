@@ -15,12 +15,18 @@ layout: null
       <item>
         <title>{{ post.title | xml_escape }}</title>
         {% if post.excerpt %}
-					<description>{{ post.excerpt | xml_escape }}</description>
-				{% else %}
-					<description>{{ post.content | xml_escape }}</description>
-				{% endif %}
+		<description>{{ post.excerpt | xml_escape }}</description>
+	{% else %}
+		<description>{{ post.content | xml_escape }}</description>
+	{% endif %}
         {% if post.img %}
-        <image>{{ post.img }}</image>
+        <image>
+        {% if post.img contains 'http://' %}
+		{{ post.img }}
+	{% else %}
+		{{ post.img | prepend: site.url }}
+	{% endif %}
+       	</image>
         {% endif %}
         <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
         <link>{{ post.url | prepend: site.baseurl | prepend: site.url }}</link>
