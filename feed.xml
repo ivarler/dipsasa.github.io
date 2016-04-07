@@ -21,7 +21,7 @@ layout: null
 	{% endif %}
         {% if post.img %}
         <image>
-        {% if post.img contains 'http://' %}
+        {% if post.img contains 'http://' or post.img contains 'https://' %}
 		{{ post.img }}
 	{% else %}
 		{{ post.img | prepend: site.url }}
