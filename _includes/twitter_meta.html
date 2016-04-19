@@ -1,0 +1,11 @@
+<!-- Twitter meta -->
+{% if page.img %}
+    <meta name="twitter:card" content="summary_large_image">
+{% else %}
+    <meta name="twitter:card" content="summary">
+{% endif %}
+<meta name="twitter:site" content="@{{ site.twitter_username }}">
+{% if site.data.authors[page.author].twitter %}
+    <meta name="twitter:creator" content="@{{ site.data.authors[page.author].twitter }}">
+{% endif %}
+<meta name="twitter:image:src" content="{{ page.img }}">

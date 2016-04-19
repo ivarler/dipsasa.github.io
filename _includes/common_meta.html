@@ -1,0 +1,13 @@
+<!-- Common meta -->
+<meta content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}" property="og:description">
+{% if page.title %}
+ <meta content="{{ page.title }}" property="og:title">
+{% else %}
+ <meta content="{{ site.title }}" property="og:title">
+{% endif %}
+{% if page.img %}
+ <meta content="{{ page.img }}" property="og:image">
+{% endif %}
+{% if page.url %}
+ <meta content="{{ page.url | prepend: site.url }}" property="og:url"> 
+{% endif %}
