@@ -351,9 +351,22 @@
     padding-top: 10px;
 }
 
- .post-year-header {
-     color: lighten($text-color, 50%);
- }
+#twitter-container{
+    height: 30px;
+    display: inline-block;
+}
+
+#twitter-container iframe{
+    vertical-align: middle !important;
+}
+
+.fb-share-button span{
+    vertical-align: middle !important;
+}
+
+.post-year-header {
+    color: lighten($text-color, 50%);
+}
 
 /**
  * Imgs

@@ -24,6 +24,13 @@ layout: default
   </div>
   
   <div class="padd">
+    <div id="twitter-container">
+    <a href="https://twitter.com/share" class="twitter-share-button" data-via="{{ site.twitter_username }}">Tweet</a>
+    </div>
+    <div class="fb-share-button" data-href="{{ page.url | prepend: site.url }}" data-layout="button_count" data-mobile-iframe="true"></div>
+  </div>
+  
+  <div class="padd">
     {% for tag in page.tags %}
         <a class="post-tag" href="{{ site.baseurl }}/tag/{{ tag | downcase }}" itemprop="name">
             #{{ tag }}
