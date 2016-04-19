@@ -1,11 +1,13 @@
 <!-- Twitter meta -->
 {% if page.img %}
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{{ page.img }}">
 {% else %}
     <meta name="twitter:card" content="summary">
 {% endif %}
+<meta name="twitter:title" content="{{ page.title }}">
+<meta name="twitter:description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
 <meta name="twitter:site" content="@{{ site.twitter_username }}">
 {% if site.data.authors[page.author].twitter %}
     <meta name="twitter:creator" content="@{{ site.data.authors[page.author].twitter }}">
 {% endif %}
-<meta name="twitter:image:src" content="{{ page.img }}">
